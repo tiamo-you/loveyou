@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 手機適配 -->
+  <title>浪漫科學告白</title>
+  <style>
+    body {
+      background: #fcefee;
+      font-family: 'Noto Serif TC','KaiTi','DFKai-SB','Microsoft JhengHei',serif;
+      margin: 0;
+      padding: 0;
+      overflow-y: scroll;
+    }
+
+    .envelope-container {
+      position: relative;
+      width: 90%;
+      max-width: 420px;
+      margin: 100px auto 0;
+      min-height: 600px;
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      background: #fff0f5;
+      border: 2px solid #e6b7c8;
+      border-radius: 6px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    /* flap */
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: #ffc0cb;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform 1s ease-in-out;
+      z-index: 3;
+    }
+    .envelope.open .flap {
+      transform: rotateX(-180deg);
+    }
+
+    /* 打開按鈕 */
+    .open-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 10px 20px;
+      font-size: 18px;
+      color: #ff4fa1;
+      background: #fff;
+      border: 2px solid #ff4fa1;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 10;
+      animation: glow 1.5s infinite alternate;
+    }
+    @keyframes glow {
+      from { box-shadow: 0 0 5px #ff4fa1; }
+      to { box-shadow: 0 0 15px #ff99cc; }
+    }
+
+    /* 信紙 */
+    .letter {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      width: 95%;
+      background: #fdfaf4;
+      background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+      border: 1px solid #e0d6c5;
+      padding: 18px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      max-height: 60vh; /* 高度隨螢幕調整 */
+      overflow-y: auto;
+      opacity: 0;
+      transition: bottom 1.2s ease-in-out 0.6s, opacity 1.2s ease-in-out 0.6s;
+      z-index: 1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      font-size: 16px;
+      line-height: 1.8em;
+      color: #4b2e2e;
+      font-family: 'Noto Serif TC','KaiTi','DFKai-SB','Microsoft JhengHei',serif;
+      white-space: pre-line;
+    }
+    .letter.show {
+      bottom: 250px;
+      opacity: 1;
+      z-index: 5;
+    }
+
+    /* 同意/不同意按鈕 - 左右 */
+    .response-btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    .response-btns button {
+      flex: 1;
+      font-size: 16px;
+      padding: 10px 12px;
+      margin: 0 6px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .agree-btn {
+      background: #ff99cc;
+      color: #fff;
+    }
+    .agree-btn:hover {
+      background: #ff66aa;
+      transform: scale(1.05);
+    }
+    .disagree-btn {
+      background: #bbb;
+      color: #fff;
+    }
+    .disagree-btn:hover {
+      background: #999;
+      transform: scale(1.05);
+    }
+
+    /* 浮動通知 */
+    .toast {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: #ff66aa;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.5s, transform 0.5s;
+      z-index: 9999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 小螢幕調整 */
+    @media (max-width: 400px) {
+      .open-btn {
+        font-size: 16px;
+        padding: 8px 16px;
+      }
+      .letter {
+        font-size: 15px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="envelope-container">
+    <div class="envelope" id="envelope">
+      <div class="flap"></div>
+      <button class="open-btn" id="openBtn">💌 點我打開 💌</button>
+    </div>
+
+    <div class="letter" id="letter">
+      <p>
+在宇宙的無數恆星裡  
+我卻只被你吸引  
+像質點在引力場裡永遠不會逃離  
+
+愛因斯坦的相對對論
+讓我們的時間交錯
+在時空的曲率中
+你對我
+就像是光速不變的真理
+在宇宙的膨脹中
+像是宇宙常數
+在無限的空間裡
+你對我
+像是黑洞的引力
+在無法逃脫的深淵    
+
+牛頓的萬有引力
+讓我向你飛去
+愛情的化學反應
+讓我與你的靈魂交融
+你對我
+像是化學鍵
+在分子中牢牢相連
+你對我
+就像是量子糾纏
+在無限的時空裡
+你對我
+就像是兩個量子粒子
+在同一個波函數中
+無論距離多遠
+我對你
+就像是兩個量子粒子
+在同一個量子態中
+無論時間多長
+
+我不懂所有愛的公式  
+但我知道  
+答案永遠指向你  
+你可以成為這個公式中唯一的解答嗎
+      </p>
+
+      <div class="response-btns">
+        <button class="disagree-btn" onclick="sendResponse('disagree')">不同意 ❌</button>
+        <button class="agree-btn" onclick="sendResponse('agree')">同意 ✅</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 浮動通知 -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    document.getElementById("openBtn").addEventListener("click", function() {
+      document.getElementById("envelope").classList.add("open");
+      document.getElementById("letter").classList.add("show");
+      this.style.display = "none"; 
+    });
+
+    function sendResponse(answer) {
+      const data = {
+        response: answer,
+        timestamp: Date.now()
+      };
+
+      fetch("https://tiamo-8ff28-default-rtdb.asia-southeast1.firebasedatabase.app/responses.json", {
+        method: "POST",
+        body: JSON.stringify(data)
+      }).then(res => {
+        if(res.ok){
+          showToast(answer === "agree" ? "💖 已送出：同意！" : "😢 已送出：不同意...");
+          showBrowserNotification(answer);
+        } else {
+          showToast("⚠️ 傳送失敗，請再試一次");
+        }
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    function showBrowserNotification(answer){
+      if(Notification.permission === "granted"){
+        new Notification("💌 告白回覆", {
+          body: answer === "agree" ? "他/她同意啦！💖" : "他/她拒絕了…💔",
+          icon: "https://cdn-icons-png.flaticon.com/512/833/833472.png"
+        });
+      } else if(Notification.permission !== "denied"){
+        Notification.requestPermission().then(permission => {
+          if(permission === "granted"){
+            showBrowserNotification(answer);
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
