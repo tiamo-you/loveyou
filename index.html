@@ -247,7 +247,7 @@
         body: JSON.stringify(data)
       }).then(res => {
         if(res.ok){
-          showToast(answer === "agree" ? "💖 已送出：同意！" : "😢 已送出：不同意...");
+          showToast(answer === "agree" ? "💖 從現在開始，我想和你一起慢慢走下去。" : "😢不管結果如何，我都很高興能把心意告訴你");
           showBrowserNotification(answer);
         } else {
           showToast("⚠️ 傳送失敗，請再試一次");
